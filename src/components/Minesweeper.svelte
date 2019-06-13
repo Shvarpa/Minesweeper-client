@@ -15,7 +15,7 @@
   };
 
   let game = new MinesweeperGame(rows, columns);
-  // console.log(game.generateBombs(10));
+  console.log(game.generateBombs(10));
 </script>
 
 <style>

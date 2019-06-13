@@ -1,4 +1,4 @@
-import { randomInt, objectDeepEqual } from "./utils";
+import { range, popRandom, cross } from "./utils";
 
 interface Point {
   x: number;
@@ -14,22 +14,11 @@ export class MinesweeperGame {
     this.columns = columns;
   }
 
-  generateBombs(bombCount: number, start: Point | null): Array<Point> {
-    // TODO: manage bomb overflow
-    let bombLocations: Array<Point> = [];
-    const validCandidate = (candidate: Point): boolean => {
-      return (
-        !bombLocations.every(bomb => !objectDeepEqual(candidate, bomb)) &&
-        !objectDeepEqual(candidate, start)
-      );
-    };
-
-    while (bombLocations.length < bombCount) {
-      let candidate: Point = {
-        x: randomInt(this.columns),
-        y: randomInt(this.rows)
-      };
-      if (validCandidate) bombLocations.push(candidate);
+  generateBombs(bombCount: number, start?: Point): Array<Point> {
+    let filter = start ? (x, y) => x != start.x && y != start.y : undefined;
+    let bombLocations = cross(range(this.columns), range(this.rows), filter);
+    while(bombLocations.length>bombCount){
+      popRandom(bombLocations);
     }
     return bombLocations;
   }
