@@ -6,6 +6,7 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
+    "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "npm-run-all": "^4.1.5",
@@ -17,10 +18,11 @@
     "rollup-plugin-terser": "^4.0.4",
     "sirv-cli": "^0.4.0",
     "svelte": "^3.0.0",
+    "ts-mocha": "^6.0.0",
     "typescript": "^3.5.1"
   },
   "scripts": {
-    "test": "tsc && mocha --require @babel/register \"test/**/*.spec.js\"",
+    "test": "ts-mocha --require ./test/babel-registers.js \"test/**/*.spec.ts\"",
     "build": "tsc && rollup -c",
     "autobuild": "rollup -c -w",
     "dev": "tsc && run-p start:dev autobuild tsc:watch",
