@@ -2,21 +2,26 @@ export function randomInt(range: number): number {
   return Math.floor(Math.random() * range);
 }
 
-export function zip(a: any[], b: any[]) {
-  let result = [];
-  for (let key in a) result.push([a[key], b[key]]);
-  return result;
+export function* zip(a: any[], b: any[]) {
+  for (let key in a)
+    yield [a[key], b[key]];
 }
 
-export function cross(
+export function* genFilter<T>(gen:IterableIterator<T>,filter:(item:T)=>boolean){
+  for(let item of gen) if(filter(item)) yield item
+}
+
+export function* genMap<T,N>(gen:IterableIterator<T>,mapper:(item:T)=>N){
+  for(let item of gen) yield mapper(item)
+}
+
+export function* cross(
   a: any[],
   b: any[],
-  filter?: (x: any, y: any) => boolean
 ) {
-  let result = [];
   for (let x of a)
-    for (let y of b) if (!filter || filter(x, y)) result.push([x, y]);
-  return result;
+    for (let y of b)
+      yield [x, y];
 }
 
 export function range(num: number): number[] {
@@ -29,7 +34,7 @@ export function objectDeepEqual(x: any, y: any): boolean {
     ty = typeof y;
   return x && y && tx === "object" && tx === ty
     ? ok(x).length === ok(y).length &&
-        ok(x).every(key => objectDeepEqual(x[key], y[key]))
+    ok(x).every(key => objectDeepEqual(x[key], y[key]))
     : x === y;
 }
 

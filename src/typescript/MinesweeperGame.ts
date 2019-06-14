@@ -1,4 +1,4 @@
-import { range, popRandom, cross } from "./utils";
+import { range, popRandom, cross, genFilter, genMap } from "./utils";
 
 interface Point {
   x: number;
@@ -14,10 +14,19 @@ export class MinesweeperGame {
     this.columns = columns;
   }
 
-  generateBombs(bombCount: number, start?: Point): Array<Point> {
-    let filter = start ? (x, y) => x != start.x && y != start.y : undefined;
-    let bombLocations = cross(range(this.columns), range(this.rows), filter);
-    while(bombLocations.length>bombCount){
+  generateBombs(bombCount: number, start?: Point): Point[] {
+    let grid = cross(range(this.columns), range(this.rows));
+    let bombGen = genMap(grid, point => {
+      return <Point>{
+        x: point[0],
+        y: point[1]
+      };
+    });
+    bombGen = start
+      ? genFilter(bombGen, point => !(point.x == start.x && point.y == start.y))
+      : bombGen;
+    let bombLocations = [...bombGen];
+    while (bombLocations.length > bombCount) {
       popRandom(bombLocations);
     }
     return bombLocations;

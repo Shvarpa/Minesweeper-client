@@ -1,6 +1,6 @@
 import { assert,expect } from 'chai'
 
-import { randomInt, range, zip, cross } from "../src/typescript/utils"
+import { randomInt, range, zip, cross, genFilter } from "../src/typescript/utils"
 
 describe("Utils",()=>{
     describe("#randomInt()",()=>{
@@ -10,16 +10,24 @@ describe("Utils",()=>{
         })
     })
 
+    describe("genFilter",()=>{
+        it("should create a filtered generator from generator",()=>{
+            let numberGen = function* ():IterableIterator<number> {yield 1; yield 2; yield 3;}
+            let newGen = genFilter(numberGen(),(number)=>number!=2)
+            expect([...newGen]).to.deep.equal([1,3])
+        })
+    })
+
     describe("#zip()",()=>{
         it("zip(['a','b'],[1,0]) should return [['a',1],['b',0]]", ()=>{
-           let zipped = zip(['a','b'],[1,0])
+           let zipped = [...zip(['a','b'],[1,0])]
            expect(zipped).to.deep.equal([['a',1],['b',0]])
         })
     })
 
     describe("#cross()",()=>{
         it("corss(['a','b'],[1,0]) should return [['a',1],['a',0],['b',1],['b',0]]",()=>{
-            let crossed = cross(['a','b'],[1,0])            
+            let crossed = [...cross(['a','b'],[1,0])]
             expect(crossed).to.deep.equal([['a',1],['a',0],['b',1],['b',0]])
         })
     })
