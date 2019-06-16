@@ -1,5 +1,5 @@
 <script>
-  import { MinesweeperGame } from "../typescript/MinesweeperGame";
+  // import { MinesweeperGame } from "../typescript/MinesweeperGame";
   import Mineblock from "./Mineblock.svelte";
   export let rows = 5;
   export let columns = 5;
@@ -14,8 +14,8 @@
         `;
   };
 
-  let game = new MinesweeperGame(rows, columns);
-  console.log(game.generateBombs(10));
+  // let game = new MinesweeperGame(rows, columns);
+  // console.log(game.generateBombs(10));
 </script>
 
 <style>
@@ -25,7 +25,7 @@
 <div style={gridStyle()}>
   {#each [...Array(columns).keys()] as x (x)}
     {#each [...Array(rows).keys()] as y (y)}
-      <Mineblock {...{ x, y }} />
+      <Mineblock {...{ x, y }} on:reveal={(e)=>{console.log(`x:${e.detail.x},y:${e.detail.y}`)}}/>
     {/each}
   {/each}
 </div>

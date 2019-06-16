@@ -7,11 +7,12 @@
   export let cell = 1;
   export let revealed = false;
 
-  function click() {
+  function click() {   
     if (!revealed) {
       dispatch("reveal", { x, y });
+      revealed = true;
     }
   }
 </script>
 
-<button on:click>x</button>
+<button on:click={click}>x</button>

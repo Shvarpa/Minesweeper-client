@@ -2,13 +2,6 @@
   "name": "svelte-app",
   "version": "1.0.0",
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/register": "^7.4.4",
-    "@types/mocha": "^5.2.7",
-    "chai": "^4.2.0",
-    "mocha": "^6.1.4",
     "npm-run-all": "^4.1.5",
     "rollup": "^1.15.3",
     "rollup-plugin-commonjs": "^9.3.4",
@@ -17,17 +10,13 @@
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^4.0.4",
     "sirv-cli": "^0.4.0",
-    "svelte": "^3.0.0",
-    "ts-mocha": "^6.0.0",
-    "typescript": "^3.5.1"
+    "svelte": "^3.0.0"
   },
   "scripts": {
-    "test": "ts-mocha --require ./test/babel-registers.js \"test/**/*.spec.ts\"",
-    "build": "tsc && rollup -c",
+    "build": "rollup -c",
     "autobuild": "rollup -c -w",
-    "dev": "tsc && run-p start:dev autobuild tsc:watch",
+    "dev": "run-p start:dev autobuild",
     "start": "sirv public",
-    "start:dev": "sirv public --dev",
-    "tsc:watch": " tsc -w"
+    "start:dev": "sirv public --dev"
   }
 }
