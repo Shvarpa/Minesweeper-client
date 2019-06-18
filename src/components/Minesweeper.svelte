@@ -1,31 +1,54 @@
 <script>
   // import { MinesweeperGame } from "../typescript/MinesweeperGame";
-  import Mineblock from "./Mineblock.svelte";
-  export let rows = 5;
-  export let columns = 5;
-  let bombs = Math.floor((rows * colums) / 3);
+  import Grid from "./Grid.svelte";
+  import io from "socket.io-client";
+  import socket from "../modules/client";
+  import Settings from "./Settings.svelte";
+  export let rows = 10;
+  export let columns = 10;
+  let bombs = Math.floor((rows * columns) / 3);
+  let started = false;
+  let grid;
+  let settings = false;
 
-  $: gridStyle = () => {
-    return `
-            display: grid;
-            grid-template-columns:repeat(${columns},35px);
-            grid-template-rows: repeat(${rows},35px);
-            grid-row-gap: 0px;
-        `;
+  socket.on("update", data => {
+      console.log("recived update: ",data);
+      
+      started = true;
+      let newGrid = data.grid;
+      grid = newGrid;
+  });
+
+  const changeGrid = event => {
+    let newSettings = event.detail;
+    grid = undefined;
+    rows = newSettings.rows;
+    columns = newSettings.columns;
+    bombs = newSettings.bombs;
+    started = false;
   };
 
-  // let game = new MinesweeperGame(rows, columns);
-  // console.log(game.generateBombs(10));
+  $: current = {
+    rows,
+    columns,
+    bombs,
+  } 
 </script>
 
-<style>
-
-</style>
-
-<div style={gridStyle()}>
-  {#each [...Array(columns).keys()] as x (x)}
-    {#each [...Array(rows).keys()] as y (y)}
-      <Mineblock {...{ x, y }} on:reveal={(e)=>{console.log(`x:${e.detail.x},y:${e.detail.y}`)}}/>
-    {/each}
-  {/each}
-</div>
+{#if !settings}
+  <Grid
+    bind:columns
+    bind:rows
+    bind:grid
+    on:reveal={event => {
+      if (!settings) {
+        let { x, y } = event.detail;
+        if (!started) {
+          socket.emit('start', { rows, columns, bombs, start: { x, y } });
+        } else {
+          socket.emit('reveal', { x, y });
+        }
+      }
+    }} />
+{/if}
+<Settings bind:settings bind:current {...{ columns, rows, bombs }} on:settings={changeGrid} />

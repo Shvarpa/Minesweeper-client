@@ -19,5 +19,7 @@
     "start": "sirv public",
     "start:dev": "sirv public --dev"
   },
-  "dependencies": {}
+  "dependencies": {
+    "socket.io-client": "^2.2.0"
+  }
 }
